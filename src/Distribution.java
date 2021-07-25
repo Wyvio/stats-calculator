@@ -1,4 +1,4 @@
-import java.util.Scanner;
+//import java.util.Scanner;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 public class Distribution {
@@ -17,6 +17,9 @@ public class Distribution {
 	double z;
 	NormalDistribution nullDist;
 	double pvalue;
+	
+	// Final conclusion
+	String conclusion;
 
 	public Distribution() {
 		// Initialize some variables
@@ -25,15 +28,12 @@ public class Distribution {
 
 	// Solve and find conclusion
 	public void solve() {
-
 		try {
 			// Calculate observed value of test statistic; z
 			z = calculateTestStatistic();
-			System.out.println("The observed value of the test statistic is " + z);
 
 			// Calculate p-value
 			pvalue = calculatePValue(nullDist);
-			System.out.println("The p-value is " + pvalue);
 
 			// Final conclusion
 			processConclusion();
@@ -43,23 +43,23 @@ public class Distribution {
 	}
 
 	// Retrieves necessary data using passed in Scanner
-	public void getData(Scanner console) {
-		// Take in values
-		System.out.print("What is the sample's mean? ");
-		sampleMean = console.nextDouble();
-		System.out.print("What is the sample's standard deviation? ");
-		sampleStdev = console.nextDouble();
-		System.out.print("What is the sample's size? ");
-		sampleSize = console.nextInt();
-		System.out.print("What is the test's significance level? ");
-		significanceLevel = console.nextDouble();
-
-		System.out.print("What is the null hypothesis (population mean = ?) ? ");
-		nullHypothesis = console.nextDouble();
-		System.out.print("What is the alternative hypothesis (negative means testing <, positive >) ? ");
-		altHypothesis = console.nextInt();
-
-	}
+	//	public void getData(Scanner console) {
+	//		// Take in values
+	//		System.out.print("What is the sample's mean? ");
+	//		sampleMean = console.nextDouble();
+	//		System.out.print("What is the sample's standard deviation? ");
+	//		sampleStdev = console.nextDouble();
+	//		System.out.print("What is the sample's size? ");
+	//		sampleSize = console.nextInt();
+	//		System.out.print("What is the test's significance level? ");
+	//		significanceLevel = console.nextDouble();
+	//
+	//		System.out.print("What is the null hypothesis (population mean = ?) ? ");
+	//		nullHypothesis = console.nextDouble();
+	//		System.out.print("What is the alternative hypothesis (negative means testing <, positive >) ? ");
+	//		altHypothesis = console.nextInt();
+	//
+	//	}
 
 	// Calculates test statistic z
 	private double calculateTestStatistic() throws ArithmeticException {
@@ -83,14 +83,18 @@ public class Distribution {
 		return pvalue;
 	}
 
-	// Prints out conclusion in console
+	// Saves conclusion in field
 	public void processConclusion() {
-		System.out.print("Final conclusion: ");
+		conclusion = "Final conclusion: ";
 		if (pvalue <= significanceLevel) {
-			System.out.println("Reject the null hypothesis");
+			conclusion += "Reject the null hypothesis";
 		} else {
-			System.out.println("Accept the null hypothesis");
+			conclusion += "Accept the null hypothesis";
 		}
+	}
+
+	public String getConclusion() {
+		return conclusion;
 	}
 
 	public double getSampleMean() {
