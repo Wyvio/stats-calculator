@@ -15,7 +15,7 @@ public class Distribution {
 	double nullHypothesis;
 	int altHypothesis; // negative means testing <, 0 =, positive >
 
-	// Used for testing
+	// Used for testing (computed, not set)
 	private double z;
 	private double pvalue;
 	

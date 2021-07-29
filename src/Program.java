@@ -23,15 +23,26 @@ public class Program {
 
 	Instant time;
 
-	public Program() {
+	Distribution dist;
+
+	class AltHypothesisAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			dist.setAltHypothesis(Integer.parseInt(e.getActionCommand()));
+		}
 	}
 
-	public void init(Distribution dist) {
+	public Program() {
+		// Null constructor
 		frame = new JFrame("Stats Calculator");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = frame.getContentPane();
 		contentPane.add(panel = new JPanel(new GridBagLayout()));
 		constraints = new GridBagConstraints();
+	}
+
+	public void init(Distribution dist) {
+		this.dist = dist;
 
 		// Add text fields for all the parameters (left column)
 		constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -91,10 +102,36 @@ public class Program {
 		constraints.weightx = 0.5;
 		panel.add(new JLabel("Alternate Hypothesis"), constraints);
 
+//		constraints.fill = GridBagConstraints.HORIZONTAL;
+//		constraints.gridx = 4;
+//		constraints.gridy = 1;
+//		panel.add(textFieldAlt = new JTextField("", 5), constraints);
+
+		// Create the radio buttons
+		JRadioButton buttonAltHypLess = new JRadioButton("<");
+		buttonAltHypLess.setActionCommand("-1");
+
+		JRadioButton buttonAltHypNot = new JRadioButton("/=");
+		buttonAltHypNot.setActionCommand("0");
+
+		JRadioButton buttonAltHypGreat = new JRadioButton(">");
+		buttonAltHypGreat.setActionCommand("1");
+
+		// Group the radio buttons
+		ButtonGroup group = new ButtonGroup();
+		group.add(buttonAltHypLess);
+		group.add(buttonAltHypNot);
+		group.add(buttonAltHypGreat);
+
+		// Register a listener for the radio buttons.
+		buttonAltHypLess.addActionListener(new AltHypothesisAction());
+		buttonAltHypNot.addActionListener(new AltHypothesisAction());
+		buttonAltHypGreat.addActionListener(new AltHypothesisAction());
+		
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 4;
 		constraints.gridy = 1;
-		panel.add(textFieldAlt = new JTextField("", 5), constraints);
+		panel.add(group, constraints); // TODO need to figure out how to add the radio buttons to the layout
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 3;
@@ -123,7 +160,6 @@ public class Program {
 					dist.setSampleStdev(Double.parseDouble(textFieldStdev.getText()));
 					dist.setSampleSize(Integer.parseInt(textFieldSize.getText()));
 					dist.setNullHypothesis(Double.parseDouble(textFieldNull.getText()));
-					dist.setAltHypothesis(Integer.parseInt(textFieldAlt.getText()));
 					dist.setSignificanceLevel(Double.parseDouble(textFieldSig.getText()));
 					dist.solve();
 					log.append("OUTPUT: " + dist.getConclusion() + "\n");
