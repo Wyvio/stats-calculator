@@ -20,7 +20,7 @@ public class Program {
 	JTextArea log;
 	JScrollPane logScrollPane;
 	JButton buttonClear;
-	
+
 	Instant time;
 
 	public Program() {
@@ -127,15 +127,29 @@ public class Program {
 					dist.setSignificanceLevel(Double.parseDouble(textFieldSig.getText()));
 					dist.solve();
 					log.append("OUTPUT: " + dist.getConclusion() + "\n");
-					log.append("SUCCESS: computed!\n");
+					log.append("SUCCESS: computed!\n\n");
 				} catch (NumberFormatException ne) {
-					log.append("ERROR: one or more parameters blank/incorrect type, cannot compute\n");
+					log.append("ERROR: one or more parameters blank/incorrect type, cannot compute\n\n");
 				} catch (Exception ee) {
-					log.append("ERROR: an unknown error has occurred, cannot compute\n");
+					log.append("ERROR: an unknown error has occurred, cannot compute\n\n");
 				}
 			}
 		});
-		
+
+		// Add a data button
+		constraints.fill = GridBagConstraints.CENTER;
+		constraints.insets = new Insets(20, 0, 0, 0);
+		constraints.ipady = 0;
+		constraints.gridx = 0;
+		constraints.gridwidth = 2;
+		constraints.gridy = 4;
+		panel.add(buttonClear = new JButton("Get Data"), constraints);
+		buttonClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				log.append(dist + "\n\n");
+			}
+		});
+
 		// Add a clear log button
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.insets = new Insets(20, 0, 0, 0);

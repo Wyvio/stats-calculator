@@ -2,6 +2,8 @@
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 public class Distribution {
+	// Constants
+	public static final NormalDistribution NULL_DISTRIBUTION = new NormalDistribution();
 
 	// Set-up variables
 	double sampleMean;
@@ -14,16 +16,14 @@ public class Distribution {
 	int altHypothesis; // negative means testing <, 0 =, positive >
 
 	// Used for testing
-	double z;
-	NormalDistribution nullDist;
-	double pvalue;
+	private double z;
+	private double pvalue;
 	
 	// Final conclusion
 	String conclusion;
 
 	public Distribution() {
-		// Initialize some variables
-		nullDist = new NormalDistribution();
+		// Null constructor
 	}
 
 	// Solve and find conclusion
@@ -33,7 +33,7 @@ public class Distribution {
 			z = calculateTestStatistic();
 
 			// Calculate p-value
-			pvalue = calculatePValue(nullDist);
+			pvalue = calculatePValue();
 
 			// Final conclusion
 			processConclusion();
@@ -74,11 +74,11 @@ public class Distribution {
 	}
 
 	// Calculates p-value
-	private double calculatePValue(NormalDistribution nullDist) {
+	private double calculatePValue() {
 		if (altHypothesis < 0) {
-			pvalue = nullDist.cumulativeProbability(z);
+			pvalue = NULL_DISTRIBUTION.cumulativeProbability(z);
 		} else if (altHypothesis > 0) {
-			pvalue = 1 - nullDist.cumulativeProbability(z);
+			pvalue = 1 - NULL_DISTRIBUTION.cumulativeProbability(z);
 		}
 		return pvalue;
 	}
@@ -149,24 +149,8 @@ public class Distribution {
 		return z;
 	}
 
-	public void setZ(double z) {
-		this.z = z;
-	}
-
-	public NormalDistribution getNullDist() {
-		return nullDist;
-	}
-
-	public void setNullDist(NormalDistribution nullDist) {
-		this.nullDist = nullDist;
-	}
-
 	public double getPvalue() {
 		return pvalue;
-	}
-
-	public void setPvalue(double pvalue) {
-		this.pvalue = pvalue;
 	}
 
 	// Prints out String of all its data
@@ -179,7 +163,7 @@ public class Distribution {
 				+ "\nSample size n = " + sampleSize
 				+ "\nSignificance level a = " + significanceLevel
 				+ "\nNull hypothesis H0: mean = " + nullHypothesis
-				+ "\nAlternate hypothesis H1: mean " + symbol + " " + altHypothesis;
+				+ "\nAlternate hypothesis H1: mean " + symbol + " " + nullHypothesis;
 		/* @formatter:on */
 	}
 }
