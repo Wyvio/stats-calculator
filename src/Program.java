@@ -15,6 +15,7 @@ public class Program {
 	JTextField textFieldNull;
 	JTextField textFieldAlt;
 	JTextField textFieldSig;
+	JTextField textFieldConclusion;
 	JButton buttonSolve;
 
 	JTextArea log;
@@ -40,108 +41,106 @@ public class Program {
 		contentPane.add(panel = new JPanel(new GridBagLayout()));
 		constraints = new GridBagConstraints();
 	}
+	
+	private void setConstraints(int gridx, int gridy) {
+		constraints.gridx = gridx;
+		constraints.gridy = gridy;
+	}
 
 	public void init(Distribution dist) {
 		this.dist = dist;
 
 		// Add text fields for all the parameters (left column)
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
+		setConstraints(0, 0);
 		constraints.weightx = 0.5;
 		panel.add(new JLabel("Sample Mean"), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 1;
-		constraints.gridy = 0;
+		setConstraints(1, 0);
 		panel.add(textFieldMean = new JTextField("", 5), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
+		setConstraints(0, 1);
 		constraints.weightx = 0.5;
 		panel.add(new JLabel("Sample Standard Deviation"), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 1;
-		constraints.gridy = 1;
+		setConstraints(1, 1);
 		panel.add(textFieldStdev = new JTextField("", 5), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 2;
+		setConstraints(0, 2);
 		constraints.weightx = 0.5;
 		panel.add(new JLabel("Sample Size"), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 1;
-		constraints.gridy = 2;
+		setConstraints(1, 2);
 		panel.add(textFieldSize = new JTextField("", 5), constraints);
 
 		// Add small border between columns
 		constraints.fill = GridBagConstraints.NONE;
-		constraints.gridx = 2;
-		constraints.gridy = 0;
+		setConstraints(2, 0);
 		panel.add(new JLabel("  "), constraints);
 
 		// Add text fields for all the parameters (right column)
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 3;
-		constraints.gridy = 0;
+		setConstraints(3, 0);
 		constraints.weightx = 0.5;
 		panel.add(new JLabel("Null Hypothesis"), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 4;
-		constraints.gridy = 0;
+		setConstraints(4, 0);
 		panel.add(textFieldNull = new JTextField("", 5), constraints);
-
+		
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 3;
-		constraints.gridy = 1;
+		setConstraints(0, 3);
 		constraints.weightx = 0.5;
-		panel.add(new JLabel("Alternate Hypothesis"), constraints);
-
-//		constraints.fill = GridBagConstraints.HORIZONTAL;
-//		constraints.gridx = 4;
-//		constraints.gridy = 1;
-//		panel.add(textFieldAlt = new JTextField("", 5), constraints);
+		panel.add(new JLabel("Conclusion"), constraints);
+		
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		setConstraints(1, 3);
+		panel.add(textFieldConclusion = new JTextField("", 5), constraints);
 
 		// Create the radio buttons
 		JRadioButton buttonAltHypLess = new JRadioButton("<");
 		buttonAltHypLess.setActionCommand("-1");
-
-		JRadioButton buttonAltHypNot = new JRadioButton("/=");
+		JRadioButton buttonAltHypNot = new JRadioButton("\u2260");
 		buttonAltHypNot.setActionCommand("0");
-
 		JRadioButton buttonAltHypGreat = new JRadioButton(">");
 		buttonAltHypGreat.setActionCommand("1");
 
 		// Group the radio buttons
 		ButtonGroup group = new ButtonGroup();
+		Box box = Box.createHorizontalBox();
 		group.add(buttonAltHypLess);
 		group.add(buttonAltHypNot);
 		group.add(buttonAltHypGreat);
+		box.add(buttonAltHypLess);
+		box.add(buttonAltHypNot);
+		box.add(buttonAltHypGreat);
 
 		// Register a listener for the radio buttons.
 		buttonAltHypLess.addActionListener(new AltHypothesisAction());
 		buttonAltHypNot.addActionListener(new AltHypothesisAction());
 		buttonAltHypGreat.addActionListener(new AltHypothesisAction());
-		
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 4;
-		constraints.gridy = 1;
-		panel.add(group, constraints); // TODO need to figure out how to add the radio buttons to the layout
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 3;
-		constraints.gridy = 2;
+		setConstraints(3, 1);
+		constraints.weightx = 0.5;
+		panel.add(new JLabel("Alternate Hypothesis"), constraints);
+		
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		setConstraints(4, 1);
+		panel.add(box, constraints);
+
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		setConstraints(3, 2);
 		constraints.weightx = 0.5;
 		panel.add(new JLabel("Significance Level"), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 4;
-		constraints.gridy = 2;
+		setConstraints(4, 2);
 		panel.add(textFieldSig = new JTextField("0.05", 5), constraints);
 
 		// Add the solve button
@@ -162,7 +161,9 @@ public class Program {
 					dist.setNullHypothesis(Double.parseDouble(textFieldNull.getText()));
 					dist.setSignificanceLevel(Double.parseDouble(textFieldSig.getText()));
 					dist.solve();
-					log.append("OUTPUT: " + dist.getConclusion() + "\n");
+					log.append("OUTPUT: " + dist.getConclusion() + " the null hypothesis\n");
+					textFieldConclusion.setForeground(new Color(50, 160, 80));
+					textFieldConclusion.setText(dist.getConclusion());
 					log.append("SUCCESS: computed!\n\n");
 				} catch (NumberFormatException ne) {
 					log.append("ERROR: one or more parameters blank/incorrect type, cannot compute\n\n");
@@ -213,7 +214,6 @@ public class Program {
 		panel.add(logScrollPane, constraints);
 
 		// Sets the size of the frame
-		frame.setBounds(0, 0, 500, 800); // this is unnecessary since I use pack()
 		frame.pack();
 		frame.setVisible(true);
 	}

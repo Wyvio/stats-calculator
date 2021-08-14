@@ -85,11 +85,10 @@ public class Distribution {
 
 	// Saves conclusion in field
 	public void processConclusion() {
-		conclusion = "Final conclusion: ";
 		if (pvalue <= significanceLevel) {
-			conclusion += "Reject the null hypothesis";
+			conclusion = "Reject";
 		} else {
-			conclusion += "Accept the null hypothesis";
+			conclusion = "Accept";
 		}
 	}
 
@@ -155,10 +154,15 @@ public class Distribution {
 
 	// Prints out String of all its data
 	public String toString() {
+		String symbol;
 		/* @formatter:off */
-		String symbol = altHypothesis < 0 
-				? "<" 
-				: ">";
+		if (altHypothesis < 0) {
+			symbol = "<";
+		} else if (altHypothesis == 0) {
+			symbol = "\u2260";
+		} else {
+			symbol = ">";
+		}
 		return "Distribution ~ N(" + sampleMean + ", " + sampleStdev + "^2)"
 				+ "\nSample size n = " + sampleSize
 				+ "\nSignificance level a = " + significanceLevel
