@@ -120,6 +120,8 @@ public class Program {
 		box.add(buttonAltHypNot);
 		box.add(buttonAltHypGreat);
 
+		buttonAltHypNot.setSelected(true);// Default Option is 0
+
 		// Register a listener for the radio buttons.
 		buttonAltHypLess.addActionListener(new AltHypothesisAction());
 		buttonAltHypNot.addActionListener(new AltHypothesisAction());

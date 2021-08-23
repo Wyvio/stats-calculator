@@ -79,6 +79,8 @@ public class Distribution {
 			pvalue = NULL_DISTRIBUTION.cumulativeProbability(z);
 		} else if (altHypothesis > 0) {
 			pvalue = 1 - NULL_DISTRIBUTION.cumulativeProbability(z);
+		} else if (altHypothesis == 0) {
+			pvalue = 2 * NULL_DISTRIBUTION.cumulativeProbability(Math.abs(z));
 		}
 		return pvalue;
 	}
